@@ -1,0 +1,136 @@
+<html>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .contact-box {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .contact-left, .contact-right {
+            width: 45%;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .contact-left h3, .contact-right h3 {
+            margin-bottom: 15px;
+        }
+        .field {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn {
+            display: inline-block;
+            background: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            margin-top: 10px;
+        }
+        table td {
+            padding: 5px;
+        }
+        .social a {
+            display: inline-block;
+            margin-right: 10px;
+            color: #333;
+            text-decoration: none;
+        }
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        } 
+        .div{
+   color: aqua;
+   transition: 0.3s;
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   text-align: left;
+   cursor: pointer;
+   margin-top: auto;
+        }
+
+    </style>
+    <body>
+        <div class="div">
+             <ul>
+             <li><a href="abro.html"> < Back To Home</a></li>
+
+        </ul>
+        </div>
+        <section class="contact">
+         <div class="container">
+            <h2>contact us</h2>
+            <div class="contact-box">
+                <div class="contact-left">
+                    <h3>send a message</h3>
+                    <form>
+                        <input type="text" class="field" placeholder="your name" required>
+                        <input type="email" class="field" placeholder="your email" required>
+                        <input type="text" class="field" placeholder="subject" required>
+                        <textarea placeholder="message" class="field" required></textarea>
+                        <button type="submit" class="btn">send</button>
+                    </form>
+                </div>
+                <div class="contact-right">
+                    <h3>reach us</h3>
+                    <table>
+                        <tr>
+                            <td>address</td>
+                            <td>: 123 Street, City, Country</td>
+                        </tr>
+                        <tr>
+                            <td>phone</td>
+                            <td>: +123 456 7890</td>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>: info@example.com</td>
+                        </tr>
+                    </table>
+                    <div class="social">
+                        <h3>follow us</h3>
+                        <a href="#">Facebook</a>
+                        <a href="#">talegram</a>
+                        <a href="#">Instagram</a>
+                        <a href="#">youtube</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+   
+        <footer>
+            <div class="container">
+                <p>&copy; 2023 Your Company. All rights reserved.</p>
+            </div>
+        </footer>
+
+    </body>
+</html>

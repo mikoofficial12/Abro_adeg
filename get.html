@@ -1,0 +1,94 @@
+<html>
+    <style>
+        body{
+            background-image:url(IMG_20251012_143208_674.jpg) ;
+        }
+        /*Hover Image Zoom*/
+        .Zoom-overlay{
+            width: 600px;
+            height: 350px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius:10px ;
+        }
+
+        .overlay{
+            background: transparent;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: 0.5s;
+
+        }
+
+        .Zoom-overlay:hover .overlay{
+            background: color-mix(in srgb,#3c396d, transparent 50%);
+        }
+
+        .overlay h3,p{
+            width: 100%;
+            color: #fff;
+            font-size: 36px;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%);
+            text-align: center;
+            text-transform: capitalize;
+            position: absolute;
+            opacity: 0;
+            transition: 0.5s;
+
+
+        }
+
+        .overlay:hover h3{
+            bottom: 49%;
+            opacity: 1;
+
+        }
+
+        .overlay:hover p{
+         bottom: 39%;
+         font-size: 25px;
+         transition-delay:0.25s ;
+         opacity: 1;
+        }
+       body{
+        background-position: url("IMG_20251012_143208_697.jpg");
+       }
+       .div{
+    color: aqua;
+   transition: 0.3s;
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   text-align: left;
+   cursor: pointer;
+   margin-top: auto;
+       }
+   
+
+    </style>
+    <body>
+       <div class="div">
+             <ul>
+             <li><a href="abro.html"> < Back To Home</a></li>
+
+        </ul>
+        </div>
+        <!--Hover Image Zoom-->
+        <div class="zoom-overlay">
+            <img src="logo-search-grid-2x.png" alt="">
+            <div class="overlay">
+             <h3>sla mahabaru</h3>
+             <p>ይህ ማህበር በጣም ወዳጃዊ ነው፣ በእኛ ይኮራሉ፣ እናምናለን፣ ለዚህም ነው ለ6 ዓመታት በፍቅር የቆየነው። አመሰግናለሁ። <br>
+                ይህ ድህረ ገጽ የተፈጠረው ፈጣን መረጃ ለመስጠት ነው። ይህ ድህረ ገጽ እድሜን አይገድብም። በዚህ ቡድን ውስጥ 14 ልጆች <br>
+                 እና 12 አዋቂዎች አሉ፣ በቡድኑ ውስጥ በአጠቃላይ 26 ሰዎች አሉ።</p>
+          
+            </div>
+        </div>
+    </body>
+</html>

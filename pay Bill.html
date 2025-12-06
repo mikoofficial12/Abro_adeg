@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pay Bill → History • NefroPay</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+    body{
+      min-height:100vh;
+      background:linear-gradient(135deg,#1a2a6c,#b21f1f,#fdbb2d);
+      background-size:400% 400%;
+      animation:gradient 15s ease infinite;
+      color:white;display:flex;justify-content:center;align-items:center;padding:20px;
+    }
+    @keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    .card{
+      background:rgba(255,255,255,0.12);backdrop-filter:blur(28px);
+      border-radius:35px;width:100%;max-width:440px;padding:45px 35px;
+      text-align:center;box-shadow:0 35px 90px rgba(0,0,0,0.7);
+      border:3px solid rgba(255,215,0,0.6);position:relative;overflow:hidden;
+    }
+    .icon{font-size:75px;color:#ffd700;margin-bottom:20px;text-shadow:0 0 40px #ffd700;animation:float 4s infinite;}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+    h1{font-size:38px;background:linear-gradient(90deg,#ffd700,#ff8c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:15px 0;}
+
+    select,input,button{
+      width:100%;padding:22px;margin:15px 0;background:rgba(255,255,255,0.18);
+      border:none;border-radius:20px;color:white;font-size:18px;text-align:center;
+    }
+    .btn{
+      background:linear-gradient(45deg,#ffd700,#ff8c00);color:#000;font-weight:bold;
+      cursor:pointer;box-shadow:0 18px 50px rgba(255,215,0,0.5);transition:0.4s;
+    }
+    .btn:hover{transform:translateY(-10px);}
+
+    /* RECEIPT */
+    #receipt{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      background:rgba(0,0,0,0.97);display:none;justify-content:center;align-items:center;
+      z-index:9999;padding:20px;
+    }
+    .receipt-card{
+      background:linear-gradient(135deg,#1a2a6c,#b21f1f);border-radius:32px;
+      width:100%;max-width:420px;padding:45px 35px;text-align:center;
+      border:4px solid #ffd700;box-shadow:0 0 100px rgba(255,215,0,0.8);
+      animation:pop 0.8s;
+    }
+    @keyframes pop{0%{transform:scale(0.1);opacity:0}80%{transform:scale(1.08)}100%{transform:scale(1)}}
+    .success{font-size:100px;color:#00ff9d;margin-bottom:20px;animation:bounce 2s infinite;}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
+    .details{background:rgba(255,255,255,0.12);padding:28px;border-radius:20px;margin:25px 0;font-size:19px;line-height:2.4;}
+    .auto-btn{
+      background:#00ff9d;color:#000;font-weight:bold;
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse{0%,100%{box-shadow:0 0 20px #00ff9d}50%{box-shadow:0 0 50px #00ff9d}}
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="icon"><i class="fas fa-file-invoice-dollar"></i></div>
+  <h1>Pay Bill</h1>
+  <p>ቢል ክፈል • Fast Payment</p>
+
+  <select id="billType">
+    <option>Electricity (EEU)</option>
+    <option>Water</option>
+    <option>Ethio Telecom</option>
+    <option>DSTV</option>
+    <option>Internet</option>
+    <option>School Fee</option>
+  </select>
+
+  <input type="text" id="account" placeholder="Account / Meter Number">
+  <input type="number" id="amount" placeholder="Amount (ETB)" min="1">
+
+  <button class="btn" onclick="payBill()">
+    Pay Bill Now
+  </button>
+</div>
+
+<!-- RECEIPT → AUTO GO TO HISTORY -->
+<div id="receipt">
+  <div class="receipt-card">
+    <div class="success"><i class="fas fa-check-circle"></i></div>
+    <h1>Bill Paid!</h1>
+    <p>ቢል ተከፈለ! Thank you</p>
+
+    <div class="details" id="details"></div>
+
+    <!-- Auto redirect after 3 seconds -->
+    <button class="btn auto-btn" id="autoBtn">
+      Going to History in <span id="countdown">3</span>s...
+    </button>
+  </div>
+</div>
+
+<script>
+  // Load user
+  let user = JSON.parse(localStorage.getItem("nefro_user") || "{}");
+  if (!user.balance) {
+    user = { phone: "0912345678", balance: 50000, history: [] };
+    localStorage.setItem("nefro_user", JSON.stringify(user));
+  }
+
+  function payBill() {
+    const type = document.getElementById("billType").value;
+    const account = document.getElementById("account").value.trim();
+    const amount = parseFloat(document.getElementById("amount").value);
+
+    if (!account) return alert("Enter account number");
+    if (!amount || amount <= 0 || amount > user.balance) return alert("Invalid amount or low balance!");
+
+    // Save transaction
+    const tx = {
+      type: "Bill Payment",
+      bill: type,
+      account: account,
+      amount: -amount,
+      date: new Date().toLocaleString("en-ET"),
+      ref: "BILL" + Date.now().toString().slice(-8)
+    };
+
+    user.balance -= amount;
+    user.history.unshift(tx);
+    localStorage.setItem("nefro_user", JSON.stringify(user));
+
+    // Show receipt
+    document.getElementById("details").innerHTML = `
+      <strong>Reference:</strong> ${tx.ref}<br>
+      <strong>Bill:</strong> ${type}<br>
+      <strong>Account:</strong> ${account}<br>
+      <strong>Amount:</strong> ${amount.toFixed(2)} ETB<br>
+      <strong>Balance:</strong> ${user.balance.toFixed(2)} ETB
+    `;
+    document.getElementById("receipt").style.display = "flex";
+
+    // Auto countdown + go to history
+    let seconds = 3;
+    const countdownEl = document.getElementById("countdown");
+    const interval = setInterval(() => {
+      seconds--;
+      countdownEl.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(interval);
+        window.location.href = "history.html";  // Auto go to history!
+      }
+    }, 1000);
+  }
+
+  // Press Enter = Pay
+  document.addEventListener("keypress", e => e.key === "Enter" && payBill());
+</script>
+</body>
+</html>

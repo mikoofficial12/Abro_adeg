@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NefroPay - ነፍሮ ፔይ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@400;600&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+    body{
+      min-height:100vh;
+      background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:15px;
+    }
+    .card{
+      background:rgba(255,255,255,0.1);
+      backdrop-filter:blur(20px);
+      border-radius:28px;
+      width:100%;
+      max-width:430px;
+      padding:35px;
+      box-shadow:0 25px 60px rgba(0,0,0,0.6);
+      border:2px solid rgba(0,255,255,0.3);
+      text-align:center;
+    }
+    .logo{
+      width:110px;height:110px;background:#00ffff;border-radius:50%;margin:0 auto 20px;
+      display:flex;align-items:center;justify-content:center;font-size:55px;color:#000;
+      box-shadow:0 0 40px #00ffff;
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse{0%,100%{box-shadow:0 0 40px #00ffff;}50%{box-shadow:0 0 80px #00ffff;}}
+    h1{font-family:'Orbitron';font-size:34px;margin:15px 0;color:#00ffff;text-shadow:0 0 20px #00ffff;}
+    input{width:100%;padding:18px;margin:12px 0;background:rgba(255,255,255,0.15);border:none;border-radius:16px;color:#fff;font-size:17px;text-align:center;}
+    input::placeholder{color:#ccc;}
+    .btn{width:100%;padding:18px;background:#00ffff;color:#000;border:none;border-radius:16px;font-size:18px;font-weight:bold;margin-top:15px;cursor:pointer;transition:0.3s;}
+    .btn:hover{background:#00cccc;transform:scale(1.05);}
+    .balance{background:linear-gradient(45deg,#00ffff,#00ff9d);color:#000;padding:25px;border-radius:20px;font-size:32px;font-weight:bold;margin:25px 0;}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:25px;}
+    .menu-btn{background:rgba(255,255,255,0.15);padding:25px;border-radius:18px;text-decoration:none;color:#fff;transition:0.3s;}
+    .menu-btn:hover{background:#00ffff;color:#000;transform:translateY(-10px);}
+    .menu-btn i{font-size:38px;margin-bottom:10px;display:block;}
+    .hidden{display:none;}
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo"><i class="fas fa-gem"></i></div>
+  <h1>NefroPay</h1>
+  <p>ኢትዮጵያዊ ዲጂታል ባንክ • 2025</p>
+
+  <!-- Login -->
+  <div id="login">
+    <input type="tel" id="phone" placeholder="09xxxxxxxx" maxlength="10">
+    <input type="password" id="pin" placeholder="4-digit PIN" maxlength="4">
+    <button class="btn" onclick="login()">Login / Register</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dash" class="hidden">
+    <div class="balance" id="bal">0.00 ETB</div>
+    <div class="grid">
+      <a href="send.html" class="menu-btn"><i class="fas fa-paper-plane"></i>Send</a>
+      <a href="airtime.html" class="menu-btn"><i class="fas fa-mobile-alt"></i>Airtime</a>
+      <a href="pay Bill.html" class="menu-btn"><i class="fas fa-file-invoice"></i>Pay Bill</a>
+      <a href="history.html" class="menu-btn"><i class="fas fa-history"></i>History</a>
+    </div>
+    <button class="btn" style="background:#ff0066;margin-top:30px;" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<script>
+  const db = localStorage;
+  function login(){
+    const p = document.getElementById("phone").value;
+    const pin = document.getElementById("pin").value;
+    if(p.length!==10 || pin.length!==4) return alert("Check phone/PIN");
+    let user = JSON.parse(db.getItem("nefro_user")||"{}");
+    if(!user.phone){
+      user = {phone:p,pin,balance:25000,history:[]};
+      db.setItem("nefro_user",JSON.stringify(user));
+    }
+    if(user.pin!==pin) return alert("Wrong PIN!");
+    db.setItem("logged","1");
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("dash").classList.remove("hidden");
+    document.getElementById("bal").innerText = user.balance.toFixed(2)+" ETB";
+  }
+  function logout(){db.removeItem("logged");location.reload();}
+  if(db.getItem("logged")){
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("dash").classList.remove("hidden");
+    const u = JSON.parse(db.getItem("nefro_user"));
+    document.getElementById("bal").innerText = u.balance.toFixed(2)+" ETB";
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivid • Messages</title>
+<style>
+  body{margin:0;background:#0d0b1c;color:#fff;font-family:Segoe UI;}
+  header{position:fixed;top:0;left:0;right:0;height:70px;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);padding:0 20px;display:flex;align-items:center;}
+  .logo{font-size:28px;font-weight:900;background:linear-gradient(45deg,#8B00FF,#00F0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .chat-list{padding-top:80px;}
+  .chat{background:rgba(255,255,255,0.06);padding:15px;margin:10px;border-radius:20px;display:flex;align-items:center;gap:15px;position:relative;}
+  .avatar{width:60px;height:60px;border-radius:50%;object-fit:cover;}
+  .online-dot{width:14px;height:14px;background:#00ff88;border-radius:50%;position:absolute;bottom:18px;left:48px;border:3px solid #0d0b1c;box-shadow:0 0 15px #00ff88;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 15px #00ff88}50%{box-shadow:0 0 30px #00ff88}}
+  nav{position:fixed;bottom:0;left:0;right:0;height:80px;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);display:flex;justify-content:space-around;align-items:center;}
+  .nav-icon.active{color:#00F0FF;background:rgba(0,240,255,0.2);padding:10px;border-radius:15px;}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<header><div class="logo">Messages</div></header>
+<div class="chat-list">
+  <div class="chat"><img class="avatar" src="https://randomuser.me/api/portraits/women/44.jpg"><div><b>Emma</b><br>Yo! You online? <span style="color:#0f0">●</span></div><div class="online-dot"></div></div>
+  <div class="chat"><img class="avatar" src="https://randomuser.me/api/portraits/men/32.jpg"><div><b>Alex</b><br>Sent a reel</div></div>
+  <div class="chat"><img class="avatar" src="https://randomuser.me/api/portraits/women/22.jpg"><div><b>Sophia</b><br>Let's go live tonight!</div><div class="online-dot"></div></div>
+</div>
+<nav>
+  <a href="home.html" class="nav-icon"><i class="fas fa-home"></i></a>
+  <a href="search.html" class="nav-icon"><i class="fas fa-search"></i></a>
+  <a href="add.html" class="nav-icon"><i class="fas fa-plus-square"></i></a>
+  <a href="messages.html" class="nav-icon active"><i class="fas fa-comment-dots"></i></a>
+  <a href="profile.html" class="nav-icon"><i class="far fa-user-circle"></i></a>
+</nav>
+</body></html>

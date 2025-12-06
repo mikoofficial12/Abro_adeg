@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Cosmic Realm</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
+
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      background:#000;
+      overflow:hidden;
+      height:100vh;
+      perspective:1000px;
+      font-family:'Orbitron',sans-serif;
+      cursor:none;
+    }
+
+    /* Infinite Starfield */
+    .stars{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      background:radial-gradient(circle at 50% 50%, #001122 0%, #000 70%);
+    }
+    .star{
+      position:absolute;background:#fff;border-radius:50%;
+      box-shadow:0 0 10px #fff;
+      animation:twinkle 4s infinite;
+    }
+    @keyframes twinkle{
+      0%,100%{opacity:0.3;transform:scale(1)}
+      50%{opacity:1;transform:scale(1.5)}
+    }
+
+    /* Floating 3D Cubes */
+    .scene{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      transform-style:preserve-3d;
+      animation:rotateScene 60s linear infinite;
+    }
+    @keyframes rotateScene{
+      0%{transform:rotateX(10deg) rotateY(0deg)}
+      100%{transform:rotateX(10deg) rotateY(360deg)}
+    }
+
+    .cube{
+      position:absolute;width:120px;height:120px;
+      transform-style:preserve-3d;
+      animation:float 20s infinite ease-in-out;
+    }
+    .cube div{
+      position:absolute;width:120px;height:120px;
+      background:rgba(0,255,255,0.3);
+      border:2px solid #00ffff;
+      box-shadow:0 0 40px #00ffff;
+      backdrop-filter:blur(4px);
+    }
+    .front  {transform:translateZ(60px);}
+    .back   {transform:translateZ(-60px) rotateY(180deg);}
+    .right  {transform:rotateY(90deg) translateZ(60px);}
+    .left   {transform:rotateY(-90deg) translateZ(60px);}
+    .top    {transform:rotateX(90deg) translateZ(60px);}
+    .bottom {transform:rotateX(-90deg) translateZ(60px);}
+
+    @keyframes float{
+      0%,100%{transform:translateY(0) rotateX(0) rotateY(0)}
+      50%{transform:translateY(-200px) rotateX(180deg) rotateY(360deg)}
+    }
+
+    /* Neon Cursor */
+    .cursor{
+      position:fixed;width:30px;height:30px;
+      background:radial-gradient(circle,#00ffff 0%,transparent 70%);
+      border-radius:50%;pointer-events:none;
+      z-index:9999;mix-blend-mode:screen;
+      box-shadow:0 0 50px #00ffff;
+      transition:transform 0.1s;
+    }
+
+    /* Center Title */
+    .title{
+      position:fixed;top:50%;left:50%;
+      transform:translate(-50%,-50%) translateZ(200px);
+      font-size:80px;color:#00ffff;
+      text-shadow:0 0 60px #00ffff,0 0 120px #00ffff;
+      animation:pulseText 3s infinite;
+      letter-spacing:10px;z-index:10;
+    }
+    @keyframes pulseText{
+      0%,100%{text-shadow:0 0 60px #00ffff}
+      50%{text-shadow:0 0 120px #00ffff,0 0 200px #00ffff}
+    }
+
+    /* Glowing Orbs */
+    .orb{
+      position:absolute;border-radius:50%;
+      background:radial-gradient(circle at 30% 30%,#00ffff,#ff00ff);
+      filter:blur(20px);
+      animation:orbit 30s linear infinite;
+    }
+    @keyframes orbit{
+      0%{transform:translate(0,0)}
+      100%{transform:translate(calc(100vw + 200px), calc(100vh + 200px))}
+    }
+  </style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="scene" id="scene"></div>
+<div class="cursor" id="cursor"></div>
+
+<h1 class="title">COSMIC</h1>
+
+<script>
+  // Stars
+  const stars = document.getElementById("stars");
+  for(let i=0;i<300;i++){
+    const s = document.createElement("div");
+    s.className="star";
+    s.style.width=s.style.height=Math.random()*3+"px";
+    s.style.left=Math.random()*100+"%";
+    s.style.top=Math.random()*100+"%";
+    s.style.animationDelay=Math.random()*4+"s";
+    stars.appendChild(s);
+  }
+
+  // 3D Cubes
+  const scene = document.getElementById("scene");
+  const colors = ["#00ffff","#ff00ff","#ffff00","#00ff00"];
+  for(let i=0;i<25;i++){
+    const cube = document.createElement("div");
+    cube.className="cube";
+    cube.style.left=Math.random()*100+"vw";
+    cube.style.top=Math.random()*100+"vh";
+    cube.style.transform=`translateZ(${Math.random()*1000-500}px) rotateX(${Math.random()*360}deg) rotateY(${Math.random()*360}deg)`;
+    cube.style.animationDelay=Math.random()*10+"s";
+
+    ["front","back","right","left","top","bottom"].forEach(face=>{
+      const f = document.createElement("div");
+      f.className=face;
+      f.style.background=`rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255},0.3)`;
+      f.style.borderColor=colors[Math.floor(Math.random()*colors.length)];
+      cube.appendChild(f);
+    });
+    scene.appendChild(cube);
+  }
+
+  // Glowing Orbs
+  for(let i=0;i<8;i++){
+    const orb = document.createElement("div");
+    orb.className="orb";
+    orb.style.width=orb.style.height=Math.random()*300+100+"px";
+    orb.style.left="-200px";
+    orb.style.top=Math.random()*100+"vh";
+    orb.style.animationDelay=Math.random()*30+"s";
+    orb.style.animationDuration=20+Math.random()*40+"s";
+    document.body.appendChild(orb);
+  }
+
+  // Neon Cursor
+  const cursor = document.getElementById("cursor");
+  document.addEventListener("mousemove", e=>{
+    cursor.style.left=e.clientX-15+"px";
+    cursor.style.top=e.clientY-15+"px";
+  });
+
+  // Touch support
+  document.addEventListener("touchmove", e=>{
+    e.preventDefault();
+    const touch = e.touches[0];
+    cursor.style.left=touch.clientX-15+"px";
+    cursor.style.top=touch.clientY-15+"px";
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivid • Upload</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root {--pri:#ff00aa;--sec:#00ffff;--bg:#0a0a1f;}
+  body{margin:0;background:var(--bg);color:white;font-family:Segoe UI;min-height:100vh;display:flex;flex-direction:column;}
+  header{position:fixed;top:0;left:0;right:0;height:70px;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:1000;}
+  .logo{font-size:32px;font-weight:900;background:linear-gradient(45deg,var(--pri),var(--sec));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .close{font-size:28px;cursor:pointer;}
+
+  .upload-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;}
+  .drop-zone{width:90%;max-width:500px;height:450px;border:3px dashed rgba(255,255,255,0.3);border-radius:25px;background:rgba(255,255,255,0.03);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:0.4s;margin-bottom:20px;position:relative;overflow:hidden;}
+  .drop-zone:hover{border-color:var(--sec);background:rgba(0,255,255,0.1);}
+  .drop-zone.dragover{border-color:var(--pri);background:rgba(255,0,170,0.2);transform:scale(1.02);}
+
+  #preview, #videoPreview{display:none;width:100%;height:100%;object-fit:contain;position:absolute;}
+  .upload-icon{font-size:60px;color:var(--sec);margin-bottom:20px;}
+  .upload-text{font-size:18px;opacity:0.8;}
+
+  textarea{width:90%;max-width:500px;height:100px;padding:15px;background:rgba(255,255,255,0.08);border:none;border-radius:15px;color:white;font-size:16px;resize:none;margin:10px 0;}
+  textarea::placeholder{color:#aaa;}
+
+  .share-btn{margin:20px 0;padding:16px 60px;background:linear-gradient(45deg,var(--pri),var(--sec));border:none;border-radius:50px;color:white;font-size:18px;font-weight:bold;cursor:pointer;box-shadow:0 10px 30px rgba(255,0,170,0.4);transition:0.3s;}
+  .share-btn:hover{transform:translateY(-5px);}
+  .share-btn:disabled{opacity:0.6;cursor:not-allowed;}
+
+  /* Success overlay */
+  .success-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);align-items:center;justify-content:center;flex-direction:column;z-index:9999;}
+  .success-icon{font-size:80px;color:#00ff88;margin-bottom:20px;}
+  .success-text{font-size:24px;font-weight:bold;}
+
+  nav{position:fixed;bottom:0;left:0;right:0;height:80px;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);display:flex;justify-content:space-around;align-items:center;}
+  .nav-icon{font-size:28px;padding:12px;border-radius:15px;transition:0.3s;}
+  .nav-icon.active{color:var(--sec);background:rgba(0,255,255,0.2);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Vivid</div>
+  <i class="fas fa-times close" onclick="history.back()"></i>
+</header>
+
+<div class="upload-area">
+  <div class="drop-zone" id="dropZone">
+    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+    <div class="upload-text">Tap or drop photo/video here<br><small>Max 4K • Up to 10 minutes</small></div>
+    <img id="preview" alt="Preview">
+    <video id="videoPreview" controls></video>
+    <input type="file" id="fileInput" accept="image/*,video/*" hidden>
+  </div>
+
+  <textarea id="caption" placeholder="Write a colorful caption..."></textarea>
+
+  <button class="share-btn" id="shareBtn">Share to Vivid</button>
+</div>
+
+<!-- Success Screen -->
+<div class="success-overlay" id="success">
+  <i class="fas fa-check-circle success-icon"></i>
+  <div class="success-text">Posted successfully!</div>
+  <div style="margin-top:20px;">Redirecting to home...</div>
+</div>
+
+<nav>
+  <a href="home.html" class="nav-icon"><i class="fas fa-home"></i></a>
+  <a href="search.html" class="nav-icon"><i class="fas fa-search"></i></a>
+  <a href="upload.html" class="nav-icon active"><i class="fas fa-plus-square"></i></a>
+  <a href="messages.html" class="nav-icon"><i class="fas fa-comment-dots"></i></a>
+  <a href="profile.html" class="nav-icon"><i class="far fa-user-circle"></i></a>
+</nav>
+
+<script>
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const preview = document.getElementById('preview');
+  const videoPreview = document.getElementById('videoPreview');
+  const shareBtn = document.getElementById('shareBtn');
+  const success = document.getElementById('success');
+
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', e => {
+    if (e.target.files[0]) handleFiles(e.target.files[0]);
+  });
+
+  // Drag & drop
+  ['dragenter','dragover'].forEach(e => dropZone.addEventListener(e, () => dropZone.classList.add('dragover')));
+  ['dragleave','drop'].forEach(e => dropZone.addEventListener(e, () => dropZone.classList.remove('dragover')));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    if (e.dataTransfer.files[0]) handleFiles(e.dataTransfer.files[0]);
+  });
+
+  function handleFiles(file) {
+    const url = URL.createObjectURL(file);
+    if (file.type.startsWith('image/')) {
+      preview.src = url; preview.style.display = 'block'; videoPreview.style.display = 'none';
+    } else if (file.type.startsWith('video/')) {
+      videoPreview.src = url; videoPreview.style.display = 'block'; preview.style.display = 'none';
+    }
+    dropZone.querySelector('.upload-icon').style.display = 'none';
+    dropZone.querySelector('.upload-text').style.display = 'none';
+  }
+
+  shareBtn.addEventListener('click', () => {
+    if (!fileInput.files[0]) {
+      alert("Please select a photo or video first!");
+      return;
+    }
+
+    // Disable button + show success
+    shareBtn.disabled = true;
+    shareBtn.textContent = "Posting...";
+    success.style.display = 'flex';
+
+    // Wait 2 seconds → then go home
+    setTimeout(() => {
+      window.location.href = "home.html";
+    }, 2000);
+  });
+</script>
+
+</body>
+</html>

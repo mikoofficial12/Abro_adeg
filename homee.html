@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivid • Home</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{--p:#8B00FF;--s:#00F0FF;--bg:#0d0b1c;}
+  body{margin:0;background:var(--bg);color:#fff;font-family:Segoe UI;overflow-x:hidden;}
+  header{position:fixed;top:0;left:0;right:0;height:70px;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:1000;}
+  .logo{font-size:32px;font-weight:900;background:linear-gradient(45deg,var(--p),var(--s));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .stories{padding:90px 15px 20px;display:flex;gap:15px;overflow-x:auto;}
+  .story{position:relative;width:80px;flex-shrink:0;text-align:center;}
+  .ring{width:76px;height:76px;border-radius:50%;padding:4px;background:conic-gradient(var(--p),var(--s),var(--p));margin:auto;}
+  .ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:4px solid var(--bg);}
+  .feed{max-width:500px;margin:auto;padding-bottom:90px;}
+  .post{background:rgba(255,255,255,0.06);backdrop-filter:blur(15px);border-radius:20px;margin:20px 15px;overflow:hidden;}
+  .post img{width:100%;}
+  nav{position:fixed;bottom:0;left:0;right:0;height:80px;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);display:flex;justify-content:space-around;align-items:center;}
+  .nav-icon{font-size:28px;padding:10px;border-radius:15px;transition:0.3s;}
+  .nav-icon.active{color:var(--s);background:rgba(0,255,255,0.2);}
+</style>
+</head>
+<body>
+<header><div class="logo">Abro.com</div><i class="fas fa-bell"></i></header>
+<div class="stories">
+  <div class="story"><div class="ring" style="background:#444"><i class="fas fa-plus" style="line-height:68px;font-size:28px;color:#aaa"></i></div><small>Your Story</small></div>
+  <div class="story"><div class="ring"><img src="logo.1.jpg"></div><small>zariyhun</small></div>
+  <div class="story"><div class="ring"><img src="logo.2.jpg"></div><small>Estifanos</small></div>
+  <div class="story"><div class="ring"><img src="logo.3.jpg"></div><small></small></div>
+  <div class="story"><div class="ring"><img src="logo.4.jpg"></div><small>Estifanos</small></div>
+  <div class="story"><div class="ring"><img src="logo.5.jpg"></div><small>Estifanos</small></div>
+  <div class="story"><div class="ring"><img src="logo.6.jpg"></div><small>Estifanos</small></div>
+  <div class="story"><div class="ring"><img src="logo.7.jpg"></div><small>Estifanos</small></div>
+  <div class="story"><div class="ring"><img src="logo.8.jpg"></div><small>Estifanos</small></div>
+  <div class="story"><div class="ring"><img src="logo.9.jpg"></div><small>Estifanos</small></div>
+  <div class="story"><div class="ring"><img src="logo.10.jpg"></div><small>Estifanos</small></div>
+  <div class="story"><div class="ring"><img src="logo.11.jpg"></div><small>Estifanos</small></div>
+  <div class="story"><div class="ring"><img src="logo.12.jpg"></div><small>Estifanos</small></div>
+
+</div>
+<div class="feed">
+  <div class="post"><img src="img (2).jpg"><div style="padding:15px"><b>Abro adeg mans</b> · ✨</div></div>
+  <div class="post"><img src="img (1).jpg"><div style="padding:15px"><b>cyberpunk</b> · </div></div>
+  <div class="post"><img src="img (122).jpg"><div style="padding:15px"><b>julia_art</b> ·  ✨</div></div>
+</div>
+<nav>
+  <a href="home.html" class="nav-icon active"><i class="fas fa-home"></i></a>
+  <a href="search.html" class="nav-icon"><i class="fas fa-search"></i></a>
+  <a href="add.html" class="nav-icon"><i class="fas fa-plus-square"></i></a>
+  <a href="messages.html" class="nav-icon"><i class="fas fa-comment-dots"></i></a>
+  <a href="profile.html" class="nav-icon"><i class="far fa-user-circle"></i></a>
+</nav>
+</body></html>

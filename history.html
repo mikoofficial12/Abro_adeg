@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>History • NefroPay</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+    body{
+      min-height:100vh;
+      background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+      color:white;
+      padding:20px;
+      background-attachment:fixed;
+    }
+    .container{
+      max-width:460px;margin:0 auto;
+      background:rgba(255,255,255,0.12);
+      backdrop-filter:blur(25px);
+      border-radius:35px;
+      padding:40px 30px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.7);
+      border:2px solid rgba(0,255,255,0.4);
+      text-align:center;
+    }
+    .icon{font-size:70px;color:#00ffff;margin-bottom:20px;animation:pulse 3s infinite;}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+    h1{
+      font-size:36px;
+      background:linear-gradient(90deg,#00ffff,#00ff9d);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      margin:15px 0;
+    }
+    .balance{
+      background:rgba(0,0,0,0.4);padding:18px;border-radius:20px;
+      font-size:22px;font-weight:bold;margin:25px 0;
+    }
+    .history-list{
+      max-height:65vh;overflow-y:auto;
+      margin-top:20px;
+      padding:10px;
+    }
+    .tx{
+      background:rgba(255,255,255,0.1);
+      padding:20px;margin:12px 0;
+      border-radius:22px;
+      border-left:6px solid #00ff9d;
+      transition:0.4s;
+      position:relative;
+      animation:slideIn 0.6s;
+    }
+    @keyframes slideIn{from{transform:translateX(-100px);opacity:0}to{transform:translateX(0);opacity:1}}
+    
+    /* Highlight latest transaction */
+    .tx.latest{
+      background:linear-gradient(90deg,rgba(0,255,255,0.2),rgba(0,255,157,0.2));
+      border-left:8px solid #00ff9d;
+      box-shadow:0 0 30px rgba(0,255,157,0.5);
+      transform:scale(1.03);
+    }
+    .tx.sent{border-left-color:#ff6b6b;}
+    .tx.sent .amount{color:#ff6b6b;}
+    
+    .amount{font-size:24px;font-weight:bold;margin:8px 0;}
+    .date{font-size:14px;opacity:0.8;}
+    .type{font-size:18px;font-weight:600;}
+    
+    .back-btn{
+      margin-top:30px;padding:18px 40px;
+      background:#0066ff;color:white;border:none;
+      border-radius:20px;font-size:18px;cursor:pointer;
+    }
+    .no-tx{
+      padding:50px;font-size:18px;opacity:0.7;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="icon"><i class="fas fa-history"></i></div>
+  <h1>Transaction History</h1>
+  <p>የገንዘብ እንቅስቃሴ</p>
+
+  <div class="balance" id="currentBalance">Loading...</div>
+
+  <div class="history-list" id="historyList">
+    <!-- Filled by JavaScript -->
+  </div>
+
+  <button class="back-btn" onclick="window.location.href='bank.html'">
+    Back to Home
+  </button>
+</div>
+
+<script>
+  // Load user data
+  const user = JSON.parse(localStorage.getItem("nefro_user") || "{}");
+  const list = document.getElementById("historyList");
+  const balanceEl = document.getElementById("currentBalance");
+
+  if (!user.balance) {
+    balanceEl.innerText = "No account found";
+    list.innerHTML = "<div class='no-tx'>No transactions yet</div>";
+  } else {
+    balanceEl.innerText = `Current Balance: ${user.balance.toFixed(2)} ETB`;
+
+    if (user.history && user.history.length > 0) {
+      user.history.forEach((tx, index) => {
+        const isLatest = index === 0 && sessionStorage.getItem("highlight_tx");
+        const typeText = tx.type === "Sent" ? `Sent to ${tx.to || tx.account}` : 
+                        tx.type === "Bill Payment" ? `Paid ${tx.bill}` : tx.type || "Transaction";
+        
+        list.innerHTML += `
+          <div class="tx ${isLatest ? 'latest' : ''} ${tx.amount < 0 ? 'sent' : ''}">
+            <div class="type">${typeText}</div>
+            <div class="amount">${tx.amount < 0 ? "-" : "+"}${Math.abs(tx.amount).toFixed(2)} ETB</div>
+            <div class="date">
+              <i class="fas fa-calendar"></i> ${tx.date}<br>
+              Ref: ${tx.ref || "N/A"}
+            </div>
+          </div>
+        `;
+      });
+
+      // Auto scroll to top (latest transaction)
+      if (sessionStorage.getItem("highlight_tx")) {
+        list.scrollTop = 0;
+        sessionStorage.removeItem("highlight_tx"); // Clear flag
+      }
+    } else {
+      list.innerHTML = "<div class='no-tx'>No transactions yet</div>";
+    }
+  }
+</script>
+
+</body>
+</html>
